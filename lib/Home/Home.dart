@@ -12,9 +12,18 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _signOut();
     _checkAuthState();
   }
 
+  void _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // TODO: Navigate to login screen
+    } catch (e) {
+      // TODO: Handle error
+    }
+  }
   void _checkAuthState() async {
     if (FirebaseAuth.instance.currentUser != null) {
       // User is signed in, redirect to Splash function
