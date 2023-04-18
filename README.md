@@ -1,6 +1,6 @@
 # Proiect-MDS
 
-## Must have
+## Must havehttps://github.com/alien1403/Proiect-MDS.git
 
 1. As a User, I must initially register or log in if I have an account.
 2. As a User, after logging in, my portfolio balance (in dollars) will appear.
