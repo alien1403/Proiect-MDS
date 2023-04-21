@@ -1,4 +1,5 @@
 import 'package:chart_sparkline/chart_sparkline.dart';
+import 'package:crypto_tutorial/View/selectCoin.dart';
 import 'package:flutter/material.dart';
 
 class Item extends StatelessWidget{
@@ -11,7 +12,12 @@ class Item extends StatelessWidget{
     double myWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: myWidth * 0.01, vertical: myHeight * 0.02),
-      child: Container(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (contest) => SelectCoin(selectItem: item,)));
+        },
+        child: Container(
         child: Row(
           children: [
             Expanded(
@@ -116,6 +122,7 @@ class Item extends StatelessWidget{
           ],
         ),
       ),
+     ),
     );
   }
 }
