@@ -3,35 +3,52 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:crypto_tutorial/View/splash.dart';
 import 'package:crypto_tutorial/Authentication/SignInPage.dart';
 import 'package:crypto_tutorial/Authentication/LogInPage.dart';
+import 'package:crypto_tutorial/View/navBar.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   void initState() {
     super.initState();
-    _signOut();
-    _checkAuthState();
+    _loadSync();
+
   }
 
-  void _signOut() async {
+  Future<void> _signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
       // TODO: Navigate to login screen
     } catch (e) {
+      print(e);
       // TODO: Handle error
     }
   }
-  void _checkAuthState() async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      // User is signed in, redirect to Splash function
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Splash()),
-      );
-    }
+
+  void _loadSync()
+  {
+    _signOut().then((_) => _checkAuthState());
+  }
+
+  ///
+  ///
+  ///
+  ///
+
+  Future<void> _checkAuthState() async {
+
+      if (FirebaseAuth.instance.currentUser != null) {
+        // User is signed in, redirect to Splash function
+        print("?");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Splash()),
+        );
+      }
+
   }
 
   @override

@@ -261,6 +261,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      sha256: "7263f13cc2e39bdca4864eca62cee3497d8be8ae88369d0e106a0d4f71115156"
+      url: "https://pub.dev"
+    source: hosted
+    version: "18.4.49"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: "914898edce2f4b7cef30d02c0ff40fc2bf77c5ad0738ada33647d61d14212d3d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "18.4.49"
   term_glyph:
     dependency: transitive
     description:
@@ -294,5 +310,5 @@ packages:
     source: hosted
     version: "2.1.4"
 sdks:
-  dart: ">=2.19.2 <3.0.0"
+  dart: ">=2.18.0 <3.0.0"
   flutter: ">=1.20.0"

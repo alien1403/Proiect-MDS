@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                       password: _passwordController.text,
                     );
                     // Redirect to Splash function
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => Splash()),
                     );
