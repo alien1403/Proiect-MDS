@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:crypto_tutorial/View/splash.dart';
@@ -23,7 +24,9 @@ class _HomePageState extends State<HomePage> {
       await FirebaseAuth.instance.signOut();
       // TODO: Navigate to login screen
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       // TODO: Handle error
     }
   }
@@ -42,7 +45,9 @@ class _HomePageState extends State<HomePage> {
 
       if (FirebaseAuth.instance.currentUser != null) {
         // User is signed in, redirect to Splash function
-        print("?");
+        if (kDebugMode) {
+          print("?");
+        }
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Splash()),
@@ -72,8 +77,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: Text('Sign In'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.yellow,
-                onPrimary: Colors.black,
+                foregroundColor: Colors.black, backgroundColor: Colors.yellow,
               ),
             ),
             SizedBox(width: 16),
@@ -87,8 +91,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: Text('Log In'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.yellow,
-                onPrimary: Colors.black,
+                foregroundColor: Colors.black, backgroundColor: Colors.yellow,
               ),
             ),
           ],

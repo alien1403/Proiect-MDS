@@ -11,7 +11,8 @@ dependencies:
   chart_sparkline: 1.0.13
   flutter:
     sdk: flutter
-  syncfusion_flutter_charts: ^18.1.48
+  syncfusion_flutter_charts: 21.1.41
+  syncfusion_flutter_core: 21.1.41
   cupertino_icons: ^1.0.5
   firebase_auth: ^4.4.2
 

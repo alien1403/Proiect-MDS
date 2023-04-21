@@ -66,8 +66,7 @@ class _SignInPageState extends State<SignInPage> {
               },
               child: Text('Create Account'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.yellow,
-                onPrimary: Colors.black,
+                foregroundColor: Colors.black, backgroundColor: Colors.yellow,
               ),
             ),
           ],
