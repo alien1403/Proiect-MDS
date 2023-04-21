@@ -1,5 +1,6 @@
 import 'package:crypto_tutorial/Model/coinModel.dart';
 import 'package:crypto_tutorial/View/Components/item.dart';
+import 'package:crypto_tutorial/View/Components/item2.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/rendering.dart';
@@ -173,6 +174,60 @@ class _HomeState extends State<Home> {
                       return Item(item: coinMarket![index], );
                     },),
 
+
+
+
+                  SizedBox(
+                    height: myHeight * 0.002,
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: myWidth * 0.05),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Recommend to Buy',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: myWidth * 0.03),
+                      child: isRefreshing == true
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xffFBC700),
+                              ),
+                            )
+                          : coinMarket == null || coinMarket!.length == 0
+                              ? Padding(
+                                  padding: EdgeInsets.all(myHeight * 0.06),
+                                  child: Center(
+                                    child: Text(
+                                      'Attention this Api is free, so you cannot send multiple requests per second, please wait and try again later.',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: coinMarket!.length,
+                                  itemBuilder: (context, index) {
+                                    return Item2(
+                                      item: coinMarket![index],
+                                    );
+                                  },
+                                ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: myHeight * 0.01,
+                  ),
 
                 ],
               ),
