@@ -29,3 +29,7 @@
 
 Flutter & Dart
 
+## Link catre Backlog
+
+https://trello.com/b/l5pfZXHY/cryptoapp
+
