@@ -35,4 +35,4 @@ Flutter & Dart
 https://trello.com/b/l5pfZXHY/cryptoapp
 
 ## Diagrama UML
-[Diagrama_UML_Crypto-App.drawio.pdf](https://github.com/alien1403/Proiect-MDS/files/11360673/Diagrama_UML_Crypto-App.drawio.pdf)
+![Screenshot](uploads/Diagrama_UML_Crypto-App.png)
