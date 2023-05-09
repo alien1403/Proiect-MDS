@@ -15,6 +15,7 @@ dependencies:
   syncfusion_flutter_core: 21.1.41
   cupertino_icons: ^1.0.5
   firebase_auth: ^4.4.2
+  cloud_firestore: ^4.4.2
 
 dev_dependencies:
   flutter_test:

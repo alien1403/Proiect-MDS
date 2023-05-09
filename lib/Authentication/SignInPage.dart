@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto_tutorial/Model/coinModel.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:crypto_tutorial/View/splash.dart';
+import 'package:http/http.dart' as http;
+
 
 class SignInPage extends StatefulWidget {
   @override
@@ -53,6 +57,8 @@ class _SignInPageState extends State<SignInPage> {
                       password: _passwordController.text,
                     );
                     if (userCredential.user != null) {
+                      await setDefaultValues();
+                      print("chiar a asteptat???");
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => Splash()),
@@ -74,4 +80,59 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
+
+
+
+
+
+  Future<void> setDefaultValues() async
+  {
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      User? user = auth.currentUser;
+      var uid = user?.uid;
+      print("🆄🆆🆄 ⓤⓦⓤ  ＵｗＵ  ✧･ﾟ: *✧･ﾟ♡*(ᵘʷᵘ)*♡･ﾟ✧*:･ﾟ✧ +  " + uid.toString());
+
+      Map<String,num> dictionar = new Map<String,num>();
+      dictionar["balance"] = 0;
+
+      final db = FirebaseFirestore.instance;
+
+
+      List<CoinModel>? listaReturnata = await getAllCoins();
+      for (var coin in listaReturnata!)
+      {
+        print(coin.id);
+        dictionar[coin.id] = 0;
+      }
+      db.collection("UserData").doc(uid.toString()).set(dictionar);
+      
+  }
+
+  Future<List<CoinModel>?> getAllCoins() async
+  {
+    const url =
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true';
+
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
+
+    List<CoinModel>? coinMarketList = null;
+    if (response.statusCode == 200) {
+      var x = response.body;
+      coinMarketList = coinModelFromJson(x);
+    } else {
+      print(response.statusCode);
+    }
+
+
+    return coinMarketList;
+  }
+
+
+
+
+
+
 }

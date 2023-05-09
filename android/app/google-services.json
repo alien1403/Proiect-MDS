@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "916558432386",
-    "project_id": "crypto-app-mds",
-    "storage_bucket": "crypto-app-mds.appspot.com"
+    "project_number": "615636130311",
+    "project_id": "mds-copy",
+    "storage_bucket": "mds-copy.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:916558432386:android:2ba11a6d7404060fee4c9b",
+        "mobilesdk_app_id": "1:615636130311:android:fd2ebfbd23d6a465bfe8a2",
         "android_client_info": {
           "package_name": "com.MDS.Crypto_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "916558432386-5bjnloqmnjeha0nvjfsfld60h1fc5lhl.apps.googleusercontent.com",
+          "client_id": "615636130311-fmplc6nh87ppknediocqocqqs12o1kuh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDjvZ43Y_dX7IETRQ2DGzmTGvZ3zXy9HLg"
+          "current_key": "AIzaSyBBua-qanuZrWtWmXp-JhyoXO-vJIhuTuM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "916558432386-5bjnloqmnjeha0nvjfsfld60h1fc5lhl.apps.googleusercontent.com",
+              "client_id": "615636130311-fmplc6nh87ppknediocqocqqs12o1kuh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
