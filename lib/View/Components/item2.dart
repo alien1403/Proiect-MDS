@@ -7,14 +7,16 @@ class Item2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     double myHeight = MediaQuery.of(context).size.height;
     double myWidth = MediaQuery.of(context).size.width;
+    print("item2: " + item.id);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: myWidth * 0.03, vertical: myHeight * 0.02),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (contest) => SelectCoin(selectItem: item,)));
+              context, MaterialPageRoute(builder: (context) => SelectCoin(selectItem: item,)));
         },
         child: Container(
             padding: EdgeInsets.only(

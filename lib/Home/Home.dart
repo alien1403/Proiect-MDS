@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         if (kDebugMode) {
           print("?");
         }
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Splash()),
         );

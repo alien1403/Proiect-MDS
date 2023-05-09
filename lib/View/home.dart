@@ -1,9 +1,15 @@
+import 'dart:ffi';
+
+import 'package:crypto_tutorial/Model/coinData.dart';
 import 'package:crypto_tutorial/Model/coinModel.dart';
 import 'package:crypto_tutorial/View/Components/item.dart';
 import 'package:crypto_tutorial/View/Components/item2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/rendering.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,16 +19,26 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  num portfolioValue = 0;
+
   @override
   void initState() {
-    getCoinMarket();
     super.initState();
+    getCoinMarket();
+    getPortfolioValue().then((rasp)  {
+      setState(() {
+          portfolioValue = rasp;
+      });
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
     double myHeight = MediaQuery.of(context).size.height;
     double myWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         height: myHeight,
@@ -78,9 +94,10 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$ 2,474.50',
-                      style: TextStyle(fontSize: 35),
+                      '\$ ' + portfolioValue.toStringAsFixed(3),
+                      style: TextStyle(fontSize: 25),
                     ),
+
                     Container(
                       padding: EdgeInsets.all(myWidth * 0.02),
                       height: myHeight * 0.05,
@@ -244,6 +261,7 @@ class _HomeState extends State<Home> {
 
   List? coinMarket = [];
   var coinMarketList;
+
   Future<List<CoinModel>?> getCoinMarket() async {
     const url =
         'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true';
@@ -268,4 +286,62 @@ class _HomeState extends State<Home> {
       print(response.statusCode);
     }
   }
+
+
+  Future<num> getPortfolioValue() async
+  {
+    num rez = 0;
+    print("Start getting value");
+    final db = FirebaseFirestore.instance;
+    var useruid = FirebaseAuth.instance.currentUser?.uid;
+
+
+    final CollectionReference userDataRef =
+    FirebaseFirestore.instance.collection('UserData');
+
+    final QuerySnapshot querySnapshot = await userDataRef.get();
+
+
+    if (querySnapshot.docs.isNotEmpty) {
+      print("ce e in query-ul asta?");
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if(documentSnapshot.id != useruid)
+          continue;
+
+        Map<String,dynamic>? harta = documentSnapshot.data() as Map<String, dynamic>?;
+
+        for (var item in harta!.entries)
+          {
+            print(item.key + " ---- " + item.value.toString());
+            if(item.key == "balance")
+              {
+                rez += item.value;
+                continue;
+              }
+            if(item.value == 0)
+              continue;
+
+            CoinData coin = new CoinData(id: item.key);
+            await coin.getCoinData();
+
+            rez += coin.value * item.value;
+            print("rez= " + rez.toString());
+          }
+
+
+        print('Document ID: ${documentSnapshot.id}');
+        print('Data: ${documentSnapshot.data()}');
+
+      }
+    } else {
+      print('No documents found in the "UserData" collection.');
+    }
+
+    return rez;
+  }
+
+
+
+
+
 }
