@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/rendering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:crypto_tutorial/Model/notificationAPI.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -31,7 +33,6 @@ class _HomeState extends State<Home> {
           portfolioValue = rasp;
       });
     });
-
   }
 
   @override
@@ -79,7 +80,7 @@ class _HomeState extends State<Home> {
                   ),
                   Text(
                     'Test (WIP)',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18)
                   ),
                 ],
               ),
@@ -339,9 +340,6 @@ class _HomeState extends State<Home> {
 
     return rez;
   }
-
-
-
 
 
 }
