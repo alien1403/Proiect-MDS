@@ -172,37 +172,13 @@ class _SellPageState extends State<SellPage> {
 
             ElevatedButton(
               onPressed: () async {
-                bool ok = await updateCrypto(doubleVar);
-
-                if(ok)
-                {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => NavBar()),
-                  );
-                }
-                else
-                {
-                  showDialog(context: context,
-                      builder: (BuildContext context)
-                      {
-                        return AlertDialog(
-                          title: Text("Error"),
-                          content: Text("Not enough ammount"),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text("OK"),
-                              onPressed: ()
-                              {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      }
-                  );
-                }
-              },
+                      await updateCrypto(doubleVar);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => NavBar()),
+                      );
+                    }
+              ,
               child: Text('Sell'),
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black, backgroundColor: Colors.yellow,
@@ -217,12 +193,8 @@ class _SellPageState extends State<SellPage> {
   }
 
 
-  Future<bool> updateCrypto(num ammount) async
+  Future<void> updateCrypto(num value) async
   {
-    if(ammount < 0.0)
-      return false;
-
-
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     var uid = user?.uid;
@@ -231,67 +203,45 @@ class _SellPageState extends State<SellPage> {
 
     num current = 0;
 
+
+
     final CollectionReference userDataRef =
     FirebaseFirestore.instance.collection('UserData');
 
     final QuerySnapshot querySnapshot = await userDataRef.get();
 
 
-    if(querySnapshot.docs.isEmpty)
-        return false;
-
-    double balance = 0;
-    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      if(documentSnapshot.id != uid)
-        continue;
-      Map<String,dynamic>? harta = documentSnapshot.data() as Map<String, dynamic>?;
-      for (var item in harta!.entries)
-      {
-        if(item.key == "balance")
-          balance = item.value.toDouble();
-        else
+    if (querySnapshot.docs.isNotEmpty) {
+      print("ce e in query-ul asta?");
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if(documentSnapshot.id != uid)
           continue;
 
+        Map<String,dynamic>? harta = documentSnapshot.data() as Map<String, dynamic>?;
+
+        for (var item in harta!.entries)
+        {
+          if(item.key != widget.coin_id)
+            continue;
+
+          current = item.value;
+        }
+
+
+        print('Document ID: ${documentSnapshot.id}');
+        print('Data: ${documentSnapshot.data()}');
+
       }
+    } else {
+      print('No documents found in the "UserData" collection.');
     }
 
-    CoinData cd = new CoinData(id: widget.coin_id);
-    await cd.getCoinData();
-
-    double coin_value = cd.value.toDouble();
-    double total_cost = ammount.toDouble() * coin_value;
-
-
-
-    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      if(documentSnapshot.id != uid)
-        continue;
-
-      Map<String,dynamic>? harta = documentSnapshot.data() as Map<String, dynamic>?;
-
-      for (var item in harta!.entries)
-      {
-        if(item.key != widget.coin_id)
-          continue;
-
-        current = item.value;
-      }
-
-      print('Document ID: ${documentSnapshot.id}');
-      print('Data: ${documentSnapshot.data()}');
-
-    }
-
-    if(current - ammount < 0.0)
-      return false;
-
-
-    current -= ammount;
-    balance += total_cost;
-
-    db.collection("UserData").doc(uid.toString()).update({widget.coin_id : current});
-    db.collection("UserData").doc(uid.toString()).update({"balance" : balance});
-    return true;
+    if(current - value >= 0)
+      current -= value;
+    else
+      print("ce faci mai cu negative");
+    db.collection("UserData").doc(uid.toString()).set({widget.coin_id : current});
+    return;
   }
 
 

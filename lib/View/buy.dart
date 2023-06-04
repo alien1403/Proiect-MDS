@@ -9,7 +9,6 @@ import 'package:crypto_tutorial/View/splash.dart';
 import 'package:crypto_tutorial/View/navBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto_tutorial/Model/coinData.dart';
 
 class BuyPage extends StatefulWidget {
 
@@ -173,37 +172,13 @@ class _BuyPageState extends State<BuyPage> {
 
                 ElevatedButton(
                   onPressed: () async {
-                    bool ok = await updateCrypto(doubleVar);
-
-                    if(ok)
-                      {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => NavBar()),
-                        );
-                      }
-                    else
-                    {
-                      showDialog(context: context,
-                          builder: (BuildContext context)
-                          {
-                            return AlertDialog(
-                              title: Text("Error"),
-                              content: Text("Not enough balance"),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text("OK"),
-                                  onPressed: ()
-                                  {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          }
-                      );
-                    }
-                  },
+                    await updateCrypto(doubleVar);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => NavBar()),
+                    );
+                  }
+                  ,
                   child: Text('Buy'),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black, backgroundColor: Colors.yellow,
@@ -218,12 +193,8 @@ class _BuyPageState extends State<BuyPage> {
   }
 
 
-  Future<bool> updateCrypto(num ammount) async
+  Future<void> updateCrypto(num value) async
   {
-    if(ammount < 0.0)
-      return false;
-
-
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     var uid = user?.uid;
@@ -240,67 +211,37 @@ class _BuyPageState extends State<BuyPage> {
     final QuerySnapshot querySnapshot = await userDataRef.get();
 
 
-    if (querySnapshot.docs.isEmpty)
-      {
-        print('No documents found in the "UserData" collection.');
-        return false;
-      }
-
-
-    double balance = 0;
-    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      if(documentSnapshot.id != uid)
-        continue;
-      Map<String,dynamic>? harta = documentSnapshot.data() as Map<String, dynamic>?;
-      for (var item in harta!.entries)
-      {
-        if(item.key == "balance")
-          balance = item.value.toDouble();
-        else
+    if (querySnapshot.docs.isNotEmpty) {
+      print("ce e in query-ul asta?");
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        if(documentSnapshot.id != uid)
           continue;
 
+        Map<String,dynamic>? harta = documentSnapshot.data() as Map<String, dynamic>?;
+
+        for (var item in harta!.entries)
+        {
+          if(item.key != widget.coin_id)
+            continue;
+
+          current = item.value;
+        }
+
+
+        print('Document ID: ${documentSnapshot.id}');
+        print('Data: ${documentSnapshot.data()}');
+
       }
-    }
-
-    CoinData cd = new CoinData(id: widget.coin_id);
-    await cd.getCoinData();
-
-    double coin_value = cd.value.toDouble();
-    double total_cost = ammount.toDouble() * coin_value;
-
-    if(balance - total_cost < 0.0)
-      return false;
-
-    balance -= total_cost;
-
-
-    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      if(documentSnapshot.id != uid)
-        continue;
-
-      Map<String,dynamic>? harta = documentSnapshot.data() as Map<String, dynamic>?;
-
-      for (var item in harta!.entries)
-      {
-        if(item.key != widget.coin_id)
-          continue;
-
-        current = item.value;
-      }
-
-      print('Document ID: ${documentSnapshot.id}');
-      print('Data: ${documentSnapshot.data()}');
-
+    } else {
+      print('No documents found in the "UserData" collection.');
     }
 
 
-    current += ammount;
-
-    db.collection("UserData").doc(uid.toString()).update({widget.coin_id : current});
-    db.collection("UserData").doc(uid.toString()).update({"balance" : balance});
-    return true;
-
+    current += value;
+    db.collection("UserData").doc(uid.toString()).set({widget.coin_id : current});
+    return;
   }
+
 
 
 }
