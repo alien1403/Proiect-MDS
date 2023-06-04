@@ -90,9 +90,10 @@ class _SignInPageState extends State<SignInPage> {
       final FirebaseAuth auth = FirebaseAuth.instance;
       User? user = auth.currentUser;
       var uid = user?.uid;
+      print("🆄🆆🆄 ⓤⓦⓤ  ＵｗＵ  ✧･ﾟ: *✧･ﾟ♡*(ᵘʷᵘ)*♡･ﾟ✧*:･ﾟ✧ +  " + uid.toString());
 
       Map<String,num> dictionar = new Map<String,num>();
-      dictionar["balance"] = 10000;
+      dictionar["balance"] = 0;
 
       final db = FirebaseFirestore.instance;
 
