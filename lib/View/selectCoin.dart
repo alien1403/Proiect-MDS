@@ -5,6 +5,8 @@ import 'package:crypto_tutorial/View/buy.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Model/chartModel.dart';
 
 class SelectCoin extends StatefulWidget {
@@ -23,6 +25,7 @@ class _SelectCoinState extends State<SelectCoin> {
   @override
   void initState() {
     getChart();
+    getNews();
     trackballBehavior = TrackballBehavior(
         enable: true, activationMode: ActivationMode.singleTap);
     super.initState();
@@ -33,6 +36,8 @@ class _SelectCoinState extends State<SelectCoin> {
 
     double myHeight = MediaQuery.of(context).size.height;
     double myWidth = MediaQuery.of(context).size.width;
+
+
 
     return SafeArea(
         child: Scaffold(
@@ -355,11 +360,15 @@ class _SelectCoinState extends State<SelectCoin> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                        child: Text(
-                                          'news to be added',
-                                          textAlign: TextAlign.justify,
-                                          style:
-                                          TextStyle(color: Colors.grey, fontSize: 17),
+                                        child: Html(
+                                          data: descriptionEn,
+                                          onLinkTap:(url, _, __, ___)
+                                          {
+                                            _launchURLfun(url);
+                                          },
+                                          style: {
+                                            'p': Style(textAlign: TextAlign.justify),
+                                          },
                                         ),
                                       ),
                                       Container(
@@ -548,6 +557,28 @@ class _SelectCoinState extends State<SelectCoin> {
   List<ChartModel>? itemChart;
 
   bool isRefresh = true;
+  String descriptionEn = "news to be added";
+
+  Future<void> getNews() async
+  {
+    String url = 'https://api.coingecko.com/api/v3/coins/bitcoin';
+    setState(() {
+      isRefresh = true;
+    });
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
+    setState(() {
+      isRefresh = false;
+    });
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      descriptionEn = jsonResponse["description"]["en"];
+    } else {
+      print(response.statusCode);
+    }
+  }
 
   Future<void> getChart() async {
     String url = 'https://api.coingecko.com/api/v3/coins/' +
@@ -578,4 +609,14 @@ class _SelectCoinState extends State<SelectCoin> {
       print(response.statusCode);
     }
   }
+
+  void _launchURLfun(String? url) async
+  {
+    if(url == null)
+      throw "no $url";
+
+    await launch(url);
+
+  }
+
 }
