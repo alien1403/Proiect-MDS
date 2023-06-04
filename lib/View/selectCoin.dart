@@ -34,7 +34,6 @@ class _SelectCoinState extends State<SelectCoin> {
   @override
   Widget build(BuildContext context) {
 
-
     double myHeight = MediaQuery.of(context).size.height;
     double myWidth = MediaQuery.of(context).size.width;
 
@@ -522,7 +521,6 @@ class _SelectCoinState extends State<SelectCoin> {
 // ============================================================================================
 // ----------------------------------------- BACK END -----------------------------------------
 // ============================================================================================
-
   List<String> text = ['D', 'W', 'M', '3M', '6M', 'Y'];
   List<bool> textBool = [false, false, true, false, false, false];
 
