@@ -220,6 +220,10 @@ class _BuyPageState extends State<BuyPage> {
 
   Future<bool> updateCrypto(num ammount) async
   {
+    if(ammount < 0.0)
+      return false;
+
+
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     var uid = user?.uid;
