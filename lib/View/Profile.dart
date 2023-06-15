@@ -45,7 +45,6 @@ class _ProfileState extends State<Profile> {
       print('Failed to update name: $e');
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -65,130 +64,137 @@ class _ProfileState extends State<Profile> {
           ),
           padding: EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                ),
-                child: CircleAvatar(
-                  radius: 80,
-                  backgroundColor: Colors.white,
-                  backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
-                  child: photoUrl == null
-                      ? Icon(
-                    Icons.person,
-                    size: 80,
-                    color: Colors.grey[300],
-                  )
-                      : null,
-                ),
-              ),
-              SizedBox(height: 32),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.person),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: _isEditing
-                            ? TextFormField(
-                          initialValue: name,
-                          onChanged: (value) {
-                            setState(() {
-                              _newName = value;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            hintText: 'Enter new name',
-                          ),
-                          style: TextStyle(fontSize: 20),
-                        )
-                            : Text(
-                          name,
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                alignment: Alignment.center, // Aligns the profile picture and log out button in the center
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2,
                         ),
                       ),
-                      SizedBox(width: 8),
-                      _isEditing
-                          ? IconButton(
-                        onPressed: _saveName,
-                        icon: Icon(Icons.save),
-                      )
-                          : IconButton(
-                        onPressed: _startEditing,
-                        icon: Icon(Icons.edit),
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundColor: Colors.white,
+                        backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
+                        child: photoUrl == null
+                            ? Icon(
+                          Icons.person,
+                          size: 80,
+                          color: Colors.grey[300],
+                        )
+                            : null,
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.email),
-                      SizedBox(width: 8),
-                      Text(
-                        email,
-                        style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 32),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(Icons.person),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: _isEditing
+                                  ? TextFormField(
+                                initialValue: name,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _newName = value;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  hintText: 'Enter new name',
+                                ),
+                                style: TextStyle(fontSize: 20),
+                              )
+                                  : Text(
+                                name,
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            _isEditing
+                                ? IconButton(
+                              onPressed: _saveName,
+                              icon: Icon(Icons.save),
+                            )
+                                : IconButton(
+                              onPressed: _startEditing,
+                              icon: Icon(Icons.edit),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.email),
+                            SizedBox(width: 8),
+                            Text(
+                              email,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.lock),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Change Password',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ChangePassword()),
+                                );
+                              },
+                              icon: Icon(Icons.edit),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 32),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => StartPage.HomePage()),
+                              (Route<dynamic> route) => false,
+                        );
+                      },
+                      icon: Icon(Icons.logout),
+                      label: Text(
+                        'LOG OUT',
+                        style: TextStyle(fontSize: 20),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.lock),
-                          SizedBox(width: 8),
-                          Text(
-                            'Change Password',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.yellow[700],
+                        onPrimary: Colors.black,
+                        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ChangePassword()),
-                          );
-                        },
-                        icon: Icon(Icons.edit),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 32),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => StartPage.HomePage()),
-                        (Route<dynamic> route) => false,
-                  );
-                },
-                icon: Icon(Icons.logout),
-                label: Text(
-                  'LOG OUT',
-                  style: TextStyle(fontSize: 20),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.yellow[700],
-                  onPrimary: Colors.black,
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],

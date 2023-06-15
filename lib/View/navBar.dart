@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:crypto_tutorial/View/Profile.dart';
 import 'anotherPage.dart';
 import 'home.dart';
+import 'PurchaseHistory.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -15,8 +16,7 @@ class _NavBarState extends State<NavBar> {
 
   List<Widget> pages = [
     Home(),
-    AnotherPage(),
-    AnotherPage(),
+    PurchaseHistory(),
     Profile(),
   ];
 
@@ -54,31 +54,17 @@ class _NavBarState extends State<NavBar> {
               ),
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/2.1.png',
-                height: myHeight * 0.03,
+              icon: Icon(
+                Icons.playlist_add_check,
                 color: Colors.grey,
               ),
               label: '',
-              activeIcon: Image.asset(
-                'assets/icons/2.2.png',
-                height: myHeight * 0.03,
+              activeIcon: Icon(
+                Icons.playlist_add_check,
                 color: Color(0xffFBC700),
               ),
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/3.1.png',
-                height: myHeight * 0.03,
-                color: Colors.grey,
-              ),
-              label: '',
-              activeIcon: Image.asset(
-                'assets/icons/3.2.png',
-                height: myHeight * 0.03,
-                color: Color(0xffFBC700),
-              ),
-            ),
+
             BottomNavigationBarItem(
               icon: Image.asset(
                 'assets/icons/4.1.png',

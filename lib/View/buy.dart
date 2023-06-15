@@ -1,5 +1,9 @@
 import 'package:crypto_tutorial/View/selectCoin.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:crypto_tutorial/Model/coinModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -218,6 +222,98 @@ class _BuyPageState extends State<BuyPage> {
   }
 
 
+
+  Future<void> updatePurchaseHistory(String email, String coinName, double quantity) async {
+    final DateTime purchaseDate = DateTime.now();
+
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Get the current purchase history for the user
+    final DocumentSnapshot userSnapshot = await firestore.collection('PurchaseHistory').doc(email).get();
+    Map<String, dynamic> userPurchaseHistory = userSnapshot.data() as Map<String, dynamic>? ?? {};
+
+    // Create a new purchase entry
+    final Map<String, dynamic> newPurchaseEntry = {
+      'purchaseDate': purchaseDate.toString(),
+      'quantity': quantity,
+      'coinName': coinName,
+      'type' : 'BUY'
+    };
+
+    // Append the new purchase entry to the user's purchase history list
+    userPurchaseHistory.update(email, (dynamic value) {
+      final List<dynamic> purchaseEntries = value as List<dynamic>;
+      purchaseEntries.add(newPurchaseEntry);
+      return purchaseEntries;
+    }, ifAbsent: () => [newPurchaseEntry]);
+
+    // Update the purchase history in Firestore
+    await firestore.collection('PurchaseHistory').doc(email).set(userPurchaseHistory);
+  }
+
+
+
+  Future<void> printAllPurchaseActions() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final String? email = user?.email;
+
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentSnapshot userSnapshot = await firestore.collection('PurchaseHistory').doc(email).get();
+
+    if (userSnapshot.exists) {
+      final Map<String, dynamic>? userPurchaseHistory = userSnapshot.data() as Map<String, dynamic>?;
+
+      if (userPurchaseHistory != null) {
+        final List<dynamic>? purchaseEntries = userPurchaseHistory[email] as List<dynamic>?;
+
+        if (purchaseEntries != null && purchaseEntries.isNotEmpty) {
+          print('Purchase History for User: $email');
+          for (var entry in purchaseEntries) {
+            final Map<String, dynamic> purchaseEntry = entry as Map<String, dynamic>;
+
+            final String purchaseDate = purchaseEntry['purchaseDate'] as String;
+            final double quantity = purchaseEntry['quantity'] as double;
+            final String coinName = purchaseEntry['coinName'] as String;
+            final String type = purchaseEntry['type'] as String;
+
+            print('=================================================================');
+            print('Purchase Date: $purchaseDate');
+            print('Quantity: $quantity');
+            print('Coin Name: $coinName');
+            print('Type: $type');
+            print('=================================================================');
+          }
+          return;
+        }
+      }
+    }
+
+    print('No purchase history found for the user: $email');
+  }
+
+
+  Future<void> emptyPurchaseHistoryCollection() async {
+    final CollectionReference purchaseHistoryCollection =
+    FirebaseFirestore.instance.collection('PurchaseHistory');
+
+    final QuerySnapshot snapshot = await purchaseHistoryCollection.get();
+    final List<DocumentSnapshot> documents = snapshot.docs;
+
+    for (DocumentSnapshot document in documents) {
+      await document.reference.delete();
+    }
+  }
+
+  Future<void> createCollection(String collectionName) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Create the collection
+    await firestore.collection(collectionName).doc().set({});
+
+    print('Collection "$collectionName" created successfully.');
+  }
+
   Future<bool> updateCrypto(num ammount) async
   {
     if(ammount < 0.0)
@@ -298,6 +394,11 @@ class _BuyPageState extends State<BuyPage> {
 
     db.collection("UserData").doc(uid.toString()).update({widget.coin_id : current});
     db.collection("UserData").doc(uid.toString()).update({"balance" : balance});
+
+    await updatePurchaseHistory(user!.email!, widget.coin_id, ammount.toDouble());
+
+
+
     return true;
 
   }
