@@ -341,5 +341,5 @@ class _HomeState extends State<Home> {
     return rez;
   }
 
-
+//Folosit chatgpt pentru corectare, refactorizare si putin generare
 }
