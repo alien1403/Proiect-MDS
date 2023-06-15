@@ -1,4 +1,22 @@
 # Proiect-MDS
+## Nume echipa
+Blockfolio
+
+## Componenta echipei
+- Hanghicel Razvan-Mihai grupa 241
+- Istrate Alexandru grupa 241
+- Moraru Cristian grupa 241
+- Sandor Cristian grupa 242
+
+## Epic story
+
+Într-un oraș modern și agitat, s-a născut o aplicație numită Blockfolio, cu un scop ambițios: să revoluționeze modul în care oamenii interacționau cu lumea criptomonedelor. Echipa talentată din spatele acestei aplicații a dorit să ofere o platformă intuitivă și prietenoasă, unde utilizatorii să poată cumpăra și vinde crypto într-un mod sigur și convenabil.
+
+Blockfolio a fost concepută cu grijă pentru a oferi o experiență transparentă și captivantă utilizatorilor săi. Interfața sa simplă și elegantă a permis utilizatorilor să navigheze ușor prin diferitele criptomonede disponibile, oferindu-le informații complete despre fiecare monedă în parte. Utilizatorii au putut accesa grafice de preț în timp real, istoricul tranzacțiilor și noutăți relevante din lumea criptomonedelor.
+
+Unul dintre aspectele cheie care a diferențiat Blockfolio de alte aplicații similare a fost funcționalitatea sa de istoric al tranzacțiilor. Utilizatorii au avut posibilitatea de a verifica cu ușurință fiecare tranzacție efectuată, inclusiv data, cantitatea și moneda implicată în fiecare tranzacție. Aceasta a contribuit la creșterea încrederii utilizatorilor în platformă și le-a oferit controlul total asupra portofoliilor lor de crypto.
+
+În final, Blockfolio a schimbat fundamental modul în care oamenii interacționează cu lumea criptomonedelor. A adus accesibilitate și ușurință în tranzacționarea crypto și a deschis calea către o economie digitală dinamică și înfloritoare.
 
 ## Must have
 
@@ -28,7 +46,7 @@
 ## Tehnologii folosite 
 
 
-Flutter & Dart
+Flutter, Dart si Firebase
 
 ## Link catre Backlog
 
